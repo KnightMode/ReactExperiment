@@ -4,7 +4,9 @@ import Shimmer from "./Shimmer";
 
 const Body = () => {
 
-    const [restaurantList, setRestaurantList] = useState();
+    const [restaurantList, setRestaurantList] = useState([]);
+    const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -16,26 +18,32 @@ const Body = () => {
         const cards = jsonData.data.cards[1].groupedCard.cardGroupMap["DISH"].cards;
         cards.shift();
         setRestaurantList(cards);
+        setFilteredRestaurants(cards);
         return cards;
     }
-
 
     const filterTopRestaurants = (resList) => {
         let filteredList = resList.filter((res) => res?.card?.card?.restaurant?.info?.avgRating > 4)
         setRestaurantList(filteredList);
     }
 
+    const searchRestaurants = () => {
+        const filteredRestaurants = restaurantList?.filter(res => res?.card?.card?.restaurant?.info.name.toLowerCase().includes(searchText));
+        console.log(filteredRestaurants);
+        setFilteredRestaurants(filteredRestaurants);
+    }
 
     return restaurantList == null || restaurantList.length === 0 ? <Shimmer /> : (
         <div className="body">
             <div className="filter">
                 <div className="search">
-                    <input type="text" className="search-box"/>
+                    <input type="text" className="search-box" value={searchText} onChange={(e) => setSearchText(e.target.value)} />
+                    <button className="search-btn" onClick={() => searchRestaurants()}>Search</button>
                 </div>
                 <button className="filter-btn" onClick={() => filterTopRestaurants(restaurantList)} onMouseOver={() => console.log('hover')}>Top Rated Restaurants</button>
             </div>
             <div className="restaurant-container">
-                {restaurantList?.map((restaurant) => {
+                {filteredRestaurants?.map((restaurant) => {
                     return <RestaurantCard key={restaurant?.card?.card?.info?.id} resData={restaurant?.card?.card?.restaurant?.info} />
                 })}
             </div>
