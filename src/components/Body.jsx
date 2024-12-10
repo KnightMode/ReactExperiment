@@ -10,7 +10,7 @@ const Body = () => {
 
     useEffect(() => {
         fetchData();
-    }, [])
+    }, []) // empty dependency array means useEffect is called only on initial Render, Note: useEffect is called after the component is rendered
 
     const fetchData = async () => {
         const data = await fetch("https://www.swiggy.com/dapi/restaurants/search/v3?lat=12.89960&lng=80.22090&str=Biryani&trackingId=bedc3bc1-cc36-8aec-097b-84c2a6f75f67&submitAction=ENTER&queryUniqueId=8eb45c97-bcee-a745-ec32-7a47fb4965bf")
