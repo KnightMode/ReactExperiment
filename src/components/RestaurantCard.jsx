@@ -1,3 +1,4 @@
+import { Link, useParams } from 'react-router-dom';
 import { CDN_URL } from '../utils/constants';
 
 const RestaurantCard = (props) => {
